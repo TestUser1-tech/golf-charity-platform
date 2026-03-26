@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { DashboardNav } from "@/components/dashboard/nav";
 
 export default async function DashboardPage() {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();

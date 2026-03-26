@@ -13,7 +13,7 @@ const charitySchema = z.object({
 });
 
 export async function GET(request: NextRequest) {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
   const search = new URL(request.url).searchParams.get("search");
 
   let query = supabase.from("charities").select("*").order("created_at", { ascending: false });
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
 
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase.from("charities").insert(parsed.data).select("*").single();
 
   if (error) {
@@ -63,7 +63,7 @@ export async function PATCH(request: NextRequest) {
     const subscriptionError = requireActiveSubscription(auth);
     if (subscriptionError) return subscriptionError;
 
-    const supabase = createServerSupabaseClient();
+    const supabase = await createServerSupabaseClient();
     const contribution = normalizeContributionPercent(Number(payload.charity_contribution_pct ?? 10));
 
     const { data, error } = await supabase
@@ -92,7 +92,7 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
 
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase
     .from("charities")
     .update(parsed.data)
@@ -119,7 +119,7 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ error: "Missing id" }, { status: 400 });
   }
 
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
   const { error } = await supabase.from("charities").delete().eq("id", id);
 
   if (error) {

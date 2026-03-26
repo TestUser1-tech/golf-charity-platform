@@ -10,7 +10,7 @@ export async function GET() {
   const adminError = requireAdmin(auth);
   if (adminError) return adminError;
 
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase
     .from("profiles")
     .select("id, email, full_name, role, subscription_status, subscription_plan, charity_id, scores(id, score, score_date, created_at)")
@@ -45,7 +45,7 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
     }
 
-    const supabase = createServerSupabaseClient();
+    const supabase = await createServerSupabaseClient();
     const { data, error } = await supabase
       .from("scores")
       .update({ score: parsed.data.score, score_date: parsed.data.score_date })
@@ -75,7 +75,7 @@ export async function PATCH(request: NextRequest) {
   }
 
   const { id, ...updateData } = parsed.data;
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase.from("profiles").update(updateData).eq("id", id).select("*").single();
 
   if (error) {

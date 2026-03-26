@@ -6,7 +6,7 @@ import { requireAdmin, requireAuthenticatedUser } from "@/lib/api-auth";
 
 export async function GET(request: NextRequest) {
   const drawId = new URL(request.url).searchParams.get("drawId");
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
 
   let query = supabase.from("prize_pools").select("*").order("created_at", { ascending: false });
   if (drawId) {
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
   }
 
   const pools = calculateTierPools(parsed.data.totalPrizePool, parsed.data.fiveMatchRollover);
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
 
   const { data, error } = await supabase.from("prize_pools").upsert(
     pools.map((pool) => ({

@@ -13,7 +13,7 @@ const drawSchema = z.object({
 });
 
 export async function GET() {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase.from("draws").select("*").order("draw_month", { ascending: false });
 
   if (error) {
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
       ? await generateAlgorithmicDraw((payload.algorithmMode as AlgorithmMode) ?? "most-frequent")
       : generateRandomDraw();
 
-    const supabase = createServerSupabaseClient();
+    const supabase = await createServerSupabaseClient();
     const { data, error } = await supabase
       .from("draws")
       .insert({
@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
 
   if (payload.action === "publish") {
     const result = await runDraw(payload.drawId, payload.draw_type, payload.algorithmMode);
-    const supabase = createServerSupabaseClient();
+    const supabase = await createServerSupabaseClient();
     await supabase.from("draws").update({ status: "published", published_at: new Date().toISOString() }).eq("id", payload.drawId);
 
     const [{ data: entries }, { data: winners }] = await Promise.all([
@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
 
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase.from("draws").insert(parsed.data).select("*").single();
 
   if (error) {

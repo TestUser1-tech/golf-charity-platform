@@ -13,7 +13,7 @@ export async function GET() {
   const auth = await requireAuthenticatedUser();
   if (auth instanceof NextResponse) return auth;
 
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
   const isAdmin = auth.profile.role === "admin";
 
   const query = supabase
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
 
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase.from("winners").insert(parsed.data).select("*").single();
 
   if (error) {
@@ -71,7 +71,7 @@ export async function PATCH(request: NextRequest) {
   if (auth instanceof NextResponse) return auth;
 
   const payload = await request.json();
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
 
   if (payload.action === "upload-proof") {
     const schema = z.object({ winnerId: z.string().uuid(), proof_image_url: z.string().url() });

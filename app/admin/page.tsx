@@ -4,7 +4,7 @@ import { AdminNav } from "@/components/admin/nav";
 import { Card } from "@/components/ui/card";
 
 export default async function AdminPage() {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
 
   const [
     usersRes,

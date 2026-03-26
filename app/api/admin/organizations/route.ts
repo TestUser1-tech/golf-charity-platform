@@ -10,7 +10,7 @@ export async function GET() {
   const adminError = requireAdmin(auth);
   if (adminError) return adminError;
 
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase
     .from("organizations")
     .select("id, name, country_code, created_at")
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
 
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase
     .from("organizations")
     .insert({
@@ -80,7 +80,7 @@ export async function PATCH(request: NextRequest) {
   }
 
   const { id, ...updateData } = parsed.data;
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase
     .from("organizations")
     .update(updateData)

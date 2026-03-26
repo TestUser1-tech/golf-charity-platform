@@ -3,7 +3,7 @@ import { AdminNav } from "@/components/admin/nav";
 import { Card } from "@/components/ui/card";
 
 export default async function ReportsPage() {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
 
   const [profilesRes, activeRes, drawRes, poolsRes, winnersRes, charitiesRes] = await Promise.all([
     supabase.from("profiles").select("id", { count: "exact", head: true }),

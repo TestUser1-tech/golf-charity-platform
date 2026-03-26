@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
 
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
   let query = supabase
     .from("donations")
     .select("id, donor_email, amount, currency, message, payment_status, created_at, completed_at, charities(name), profiles(full_name, email)")
@@ -63,7 +63,7 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
 
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
   const updateData: Record<string, unknown> = {
     payment_status: parsed.data.payment_status,
   };

@@ -10,7 +10,7 @@ export async function GET() {
   const adminError = requireAdmin(auth);
   if (adminError) return adminError;
 
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase
     .from("campaigns")
     .select("id, name, description, is_active, starts_at, ends_at, country_code, created_at")
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
 
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase
     .from("campaigns")
     .insert({
@@ -92,7 +92,7 @@ export async function PATCH(request: NextRequest) {
   }
 
   const { id, ...updateData } = parsed.data;
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
 
   if (parsed.data.is_active) {
     await supabase.from("campaigns").update({ is_active: false }).neq("id", id);

@@ -39,7 +39,7 @@ function weightedUniquePick(weightMap: Map<number, number>, pickCount: number): 
 }
 
 export async function generateAlgorithmicDraw(mode: AlgorithmMode): Promise<number[]> {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
   const { data: scores } = await supabase
     .from("scores")
     .select("score, user_id, profiles!inner(subscription_status)")
@@ -73,7 +73,7 @@ export function calculateMatches(drawnNumbers: number[], userScores: number[]): 
 }
 
 export async function runDraw(drawId: string, mode: "random" | "algorithmic", algorithmMode: AlgorithmMode = "most-frequent") {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
   const drawnNumbers = mode === "random" ? generateRandomDraw() : await generateAlgorithmicDraw(algorithmMode);
 
   const { data: activeUsers } = await supabase

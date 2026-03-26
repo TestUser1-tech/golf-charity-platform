@@ -8,7 +8,7 @@ export interface AuthContext {
 }
 
 export async function requireAuthenticatedUser(): Promise<AuthContext | NextResponse> {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();

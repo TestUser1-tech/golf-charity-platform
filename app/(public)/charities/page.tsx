@@ -8,7 +8,7 @@ interface CharityPageProps {
 }
 
 export default async function CharitiesPage({ searchParams }: CharityPageProps) {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
   const q = searchParams.q?.trim();
   const featuredOnly = searchParams.featured === "1";
 

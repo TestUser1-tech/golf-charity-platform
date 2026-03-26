@@ -5,7 +5,7 @@ import { PublicFooter } from "@/components/public/footer";
 import { Button } from "@/components/ui/button";
 
 export default async function HomePage() {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
   const [{ data: featured }, { count: subscriberCount }, { count: drawCount }, { data: drawTotals }] = await Promise.all([
     supabase.from("charities").select("*").eq("is_featured", true).limit(1).maybeSingle(),
     supabase.from("profiles").select("id", { count: "exact", head: true }).eq("subscription_status", "active"),

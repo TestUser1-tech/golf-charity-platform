@@ -8,7 +8,7 @@ interface CharityDetailProps {
 }
 
 export default async function CharityDetailPage({ params }: CharityDetailProps) {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
   const { data: charity } = await supabase.from("charities").select("*").eq("id", params.id).maybeSingle();
 
   if (!charity) {
